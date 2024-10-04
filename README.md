@@ -21,10 +21,10 @@ Os verbos devem ficar no tempo presente do indicativo
 Exemplos de mensagens de commit: <br />
 
 <ul>
-  <li>Adiciona nova funcionalidade de busca</li>
-  <li>Corrige bug na página de login</li>
-  <li>Atualiza documentação do projeto</li>
-  <li>Remove código desnecessário</li>
-  <li>Melhora desempenho da API</li>
+  <li>adiciona nova funcionalidade de busca</li>
+  <li>corrige bug na página de login</li>
+  <li>atualiza documentação do projeto</li>
+  <li>remove código desnecessário</li>
+  <li>melhora desempenho da API</li>
 </ul>
 
