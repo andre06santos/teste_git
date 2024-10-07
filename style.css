@@ -1,0 +1,40 @@
+body,html{
+    padding: 0px;
+    margin: 0px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.forms{
+    box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.3);
+    width: 20vw;
+    margin: auto;
+    margin-top: 20px;
+    padding: 20px;
+}
+.forms p{
+    font-weight: bold;
+}
+.forms h1,h3{
+    text-align: center;
+}
+.forms label{
+    text-align: justify;
+    display: block;
+}
+.forms input,select{
+    display: block;
+    box-sizing: border-box;
+    margin: auto;
+    margin-bottom: 15px;
+    width: 100%;
+    height: 35px;
+}
+.forms input[type="submit"]{
+    font-weight: bold;
+    border: 0px;
+    width: 60%;
+    border-radius: 50px;
+    margin: auto;
+    margin-bottom: 15px;
+    background-color: #00FD94;;
+    color: white;
+}
