@@ -22,7 +22,7 @@ function criarTitulo(){
     tituloElement.innerText = "RESULTADO :"
 }
 
-function erroGenerico(elementoEscolhido) {
+function mostrarErro(elementoEscolhido) {
     const erroElement = document.getElementById(`${elementoEscolhido}Erro`);
     erroElement.innerText = `${elementoEscolhido} INVÁLIDO(A)`.toUpperCase();
 }
@@ -38,7 +38,7 @@ function validarCampo(tipoResultado, elementoEscolhido, idElement, validacaoGene
         resultadoElement.innerText = `${tipoResultado}: ${valor}`.toUpperCase();
         erroElement.innerText = ''; 
     } else {
-        erroGenerico(elementoEscolhido);
+        mostrarErro(elementoEscolhido);
     }
 }
 
