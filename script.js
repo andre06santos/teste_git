@@ -17,21 +17,20 @@ function validarAltura(altura) {
     return (alturaNumerica > 0 && alturaNumerica < 2.5);
 }
 
-function criandoTitulo(){
+function criarTitulo(){
     const tituloElement = document.getElementById("titulo")
     tituloElement.innerText = "RESULTADO :"
 }
 
 function erroGenerico(elementoEscolhido) {
-    const erroElement = document.getElementById(`erro_${elementoEscolhido}`);
+    const erroElement = document.getElementById(`${elementoEscolhido}Erro`);
     erroElement.innerText = `${elementoEscolhido} INVÁLIDO(A)`.toUpperCase();
 }
 
-function resultadoGenerico(event, tipoResultado, elementoEscolhido, idElement, validacaoGenerica) {
-    event.preventDefault(); 
+function validarCampo(tipoResultado, elementoEscolhido, idElement, validacaoGenerica) {
     const valor = document.getElementById(elementoEscolhido).value;
     const resultadoElement = document.getElementById(idElement);
-    const erroElement = document.getElementById(`erro_${elementoEscolhido}`);
+    const erroElement = document.getElementById(`${elementoEscolhido}Erro`);
 
     resultadoElement.innerText = ''; 
 
@@ -43,7 +42,7 @@ function resultadoGenerico(event, tipoResultado, elementoEscolhido, idElement, v
     }
 }
 
-function resultadoCorPele() {
+function validarCorPele() {
     const resultadoCorPele = document.getElementById("corPele").value;
     const resultElement = document.getElementById("resultadoCorPele");
     const corPele = resultadoCorPele === "BR" ? "BRANCO" : 
@@ -54,11 +53,10 @@ function resultadoCorPele() {
 const formulario = document.getElementById('formulario');
 formulario.addEventListener('submit', function(event) {
     event.preventDefault(); 
-
-    resultadoGenerico(event, "|CPF", "cpf", "resultadoCpf", validarCpf);
-    resultadoGenerico(event, "|NOME", "nome", "resultadoNome", validarNome);
-    resultadoGenerico(event, "|IDADE", "idade", "resultadoIdade", validarIdade);
-    resultadoGenerico(event, "|ALTURA", "altura", "resultadoAltura", validarAltura);
-    resultadoCorPele();
-    criandoTitulo(); 
+    criarTitulo(); 
+    validarCampo("|CPF", "cpf", "resultadoCpf", validarCpf);
+    validarCampo("|NOME", "nome", "resultadoNome", validarNome);
+    validarCampo("|IDADE", "idade", "resultadoIdade", validarIdade);
+    validarCampo("|ALTURA", "altura", "resultadoAltura", validarAltura);
+    validarCorPele();
 });
