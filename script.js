@@ -19,7 +19,7 @@ const processarDados = (e) => {
     const inputs = [cpfInput, nomeInput, idadeInput, alturaInput, colorSelect]
     const inputsNames = ['Cpf', 'Nome', 'Idade', 'Altura', 'Cor de pele']
     
-    createErrorMessages(inputs, validationFunctions, inputsNames)
+    createErrorMessages(inputs, validationFunctions(), inputsNames)
 
     isValidForm() ? createDataList(inputs, inputsNames) : showErrorMessages()
     cleanInputs()
@@ -92,7 +92,6 @@ const createErrorMessages = (inputs, validationFunctions, inputsNames) => {
 
     for (let i = 0; i < inputs.length; i++){
         const actualValidationFunction = validationFunctions[i]
-        console.log(actualValidationFunction)
         const actualInput = inputs[i]
 
         if (!actualValidationFunction(actualInput.value)){
