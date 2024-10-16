@@ -40,7 +40,7 @@ const acceptOnlyText = (e) => {
 document.getElementById('cpf').addEventListener('input', acceptOnlyNumbers)
 document.getElementById('nome').addEventListener('input', acceptOnlyText)
 document.getElementById('idade') .addEventListener('input', acceptOnlyNumbers)
-document.querySelector('#corPele').addEventListener('input', acceptOnlyNumbers)
+document.getElementById('altura').addEventListener('input', acceptOnlyNumbers)
 
 
 const validateCpf = (cpfValue) => {
@@ -94,8 +94,13 @@ const createErrorMessages = (inputs, validationFunctions, inputsNames) => {
         const actualValidationFunction = validationFunctions[i]
         const actualInput = inputs[i]
 
-        if (!actualValidationFunction(actualInput.value)){
-            errorMessages.push(`Campo de ${inputsNames[i]} com dados inválidos!`)
+        if (actualInput !== 'Cor de pele')
+
+            if (!actualValidationFunction(actualInput.value)){
+                errorMessages.push(`Campo de ${inputsNames[i]} com dados inválidos!`)
+            }
+        else{
+            validateCor()
         }
     }
 
