@@ -1,60 +1,49 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>PROJETO</title>
-    <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing: border-box;
-        }
-        div{
-            display:flex;
-            gap: 10px;
-        }
-    </style>
 </head>
-<body>
-    <h1>
-        FORMULÁRIO: 
-    </h1>
-    <form>
-        <div>
-            <label for="cpf">CPF:</label>
-            <input type="text" id="cpf" required>
-        </div>
-        <div>
-            <label for="nome">NOME:</label>
-            <input type="text" id="nome" required>
-        </div>
-        <div>
-            <label for="idade">IDADE:</label>
-            <input type="text" id="idade" required>
-        </div>
-        <div>
-            <label for="altura">ALTURA:</label>
-            <input type="text" id="altura" required>
-        </div>
-        <div>
-            <label for="corPele">COR DA PELE:</label>
-            <select name="cor_da_pele" id="corPele">
-                <option value="BR">BRANCO</option>
-                <option value="NG">NEGRO</option>
-                <option value="PD">PARDO</option>
-            </select>
-        </div>
 
-        <div>
-            <input type="submit" value="CADASTRAR">
-        </div>
-    </form>
+<body>
+    <div class="container-center items-center">
+        <h1>
+            FORMULÁRIO:
+        </h1>
+        <form class="items-center">
+                <label for="cpf">CPF:</label>
+                <input type="text" id="cpf" required>
+
+                <label for="nome">NOME:</label>
+                <input type="text" id="nome" required>
+
+                <label for="idade">IDADE:</label>
+                <input type="text" id="idade" required>
+
+                <label for="altura">ALTURA:</label>
+                <input type="text" id="altura" required>
+
+                <label for="corPele">COR DA PELE:</label>
+                <select name="cor_da_pele" id="corPele">
+                    <option value="BR">BRANCO</option>
+                    <option value="NG">NEGRO</option>
+                    <option value="PD">PARDO</option>
+                </select>
+
+            <div>
+                <input type="submit" value="CADASTRAR" class="submit-input">
+            </div>
+        </form>
+    </div>
 
     <div id="showForm">
-
+        <h3>Lista de cadastrados:</h3>
     </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>
