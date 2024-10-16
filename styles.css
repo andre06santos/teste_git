@@ -70,3 +70,21 @@ ul{
     padding: 10px;
     border-radius: 15px;
 }
+
+.toast{
+    background: red;
+    padding: 10px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: show-toast 3s forwards;
+    border-radius: 15px;
+}
+
+@keyframes show-toast {
+    0%{top: -50px}
+    25%{top: 50px}
+    50%{top: 50px}
+    75%{top: 50px}
+    100%{top: -50px}
+}
