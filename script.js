@@ -1,27 +1,21 @@
-const cpfMask = () =>{
-    const cpfInput = document.querySelector("#cpf")
+const cpfMask = (event) => {
+    const cpfInput = event.target;
+    cpfInput.value = cpfInput.value.replace(/\D/g, '')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{2})$/, '-$1');
+};
 
-    cpfInput.addEventListener('input', function() {
-        this.value = this.value.replace(/\D/g, '')               
-            .replace(/(\d{3})(\d)/, '$1.$2')                         
-            .replace(/(\d{3})(\d)/, '$1.$2')                       
-            .replace(/(\d{2})$/, '-$1');                             
-    });
-}
-const handleHeightInput = () =>{
-    const heightInput = document.querySelector("#altura")
+const handleHeightInput = (event) => {
+    const heightInput = event.target;
+    heightInput.value = heightInput.value.replace(/\D/g, "")
+        .replace(/(\d{1})(\d)/, '$1,$2');
+};
 
-    heightInput.addEventListener('input',  function(){
-        this.value = this.value.replace(/\D/g,"")
-        .replace(/(\d{1})(\d)/, '$1,$2')                         
-    })
-}
-const handleAgeInput = () => {
-    const ageInput = document.querySelector("#idade");
-    ageInput.addEventListener('input', function() {
-        this.value = this.value.replace(/[^0-9]/g, ''); 
-    });
-}
+const handleAgeInput = (event) => {
+    const ageInput = event.target;
+    ageInput.value = ageInput.value.replace(/[^0-9]/g, '');
+};
 const validateCPF = (cpf) => {
     const cpfNumber = cpf.replace(/\D/g, '');
 
@@ -39,30 +33,34 @@ const validateAge = (age) => {
 
     return isValidAge
 }
-const validateHeigth = (heigth) => {
-    const isValidHeigth  = heigth > 0 && heigth < 3
+const validateHeight = (height) => {
+    const isValidHeight  = height > 0 && height < 3
     
-    return isValidHeigth
-}
-const validateSkinColor = (skinColor) => {
-    const isValidSkinColor = skinColor !== undefined
-    return isValidSkinColor
+    return isValidHeight
 }
 
-const skinColorConvert = (skinColorData) => {
-    const skinColorObject = {
+const getColorByValue = (skinColorData) => {
+    const skinColorMap = {
         "BR": "Branco",
         "NG": "Negro",
         "PD": "Pardo"
     };
-    const skinColor = skinColorObject[skinColorData];
+    const skinColor = skinColorMap[skinColorData];
     return skinColor;
 }
-const showToast = (message,styleToast) =>{
+const showToast = ({message,type}) =>{
 
     const toast = document.createElement('span')
     toast.innerText = message
-    toast.className = styleToast
+    
+    switch(type){
+        case "sucess":
+            toast.className = "toast-sucesso";
+            break;
+        case "error":
+            toast.className = "toast-erro";
+            break;
+    }
 
     const timeToast = 3 * 1000
 
@@ -81,57 +79,58 @@ const erroMessage = ({errors,cpf,name,age,height,skinColor}) =>{
     
     if(!validateAge(age))errors.push("IDADE INVÁLIDA")
     
-    if(!validateheight(height))errors.push("ALTURA INVÁLIDA")
+    if(!validateHeight(height))errors.push("ALTURA INVÁLIDA")
 
-    if(!validateSkinColor(skinColor))errors.push("COR DA PELE INVÁLIDA")
 }
 
-const showData = () => {
-    const form = document.querySelector("form");
-    const cpf = form.querySelector("#cpf");
-    const name = form.querySelector("#nome");
-    const age = form.querySelector("#idade");
-    const height = form.querySelector("#altura");
-    const skinColor = form.querySelector("#corPele");
-
+const showData = ({cpf,nome,idade,altura,corPele}) => {
     const cpfValue = cpf.value;
-    const nameValue = name.value;
-    const ageValue = Number(age.value);
-    const heightValue = Number(height.value);
-    const skinColorValue = skinColorConvert(skinColor.value);
+    const nameValue = nome.value;
+    const ageValue = Number(idade.value);
+    const heightValue = Number(altura.value);
+    const skinColorValue = getColorByValue(corPele.value);
 
+    const errors = []
 
-    const userData = {
-        errors : [],
+    erroMessage({
+        errors: errors,
         cpf  : cpfValue,
         name : nameValue,
         age  : ageValue,
         height : heightValue,
         skinColor : skinColorValue
-    };
-
-    erroMessage(userData)
+    })
 
 
-    const errorsLength = userData.errors.length;
-    console.log(userData.errors.length)
-    errorsLength !== 0 ? showToast(userData.errors[0],"toast-erro") : showToast("CADASTRADO COM SUCESSO !!!")
+    const errorsLength = errors.length;
+    errorsLength !== 0 ? showToast({
+        message: errors[0],
+        type   : "error"
+    }) : showToast({
+        message: "TODOS OS DADOS FORAM VÁLIDADOS",
+        type   : "sucess"
+    })
 
 }
 
-const form = document.querySelector(".form")
-const cpf = document.querySelector("#cpf")
-const age = document.querySelector("#idade")
-const height = document.querySelector("#altura")
+const form = document.querySelector("form");
+const cpf = form.querySelector("#cpf");
+const name = form.querySelector("#nome");
+const age = form.querySelector("#idade");
+const height = form.querySelector("#altura");
+const skinColor = form.querySelector("#corPele");
+
+cpf.addEventListener('input', cpfMask);
+height.addEventListener('input', handleHeightInput);
+age.addEventListener('input', handleAgeInput);
 
 form.addEventListener("submit", function (event) {
     event.preventDefault()
-    showData()
+    showData({
+        cpf: cpf,
+        nome: name,
+        idade: age,
+        altura: height,
+        corPele: skinColor
+    })
 })
-
-cpf.addEventListener("input",cpfMask)
-
-age.addEventListener("input",handleAgeInput)
-
-height.addEventListener("input",handleHeightInput)
-
