@@ -72,13 +72,20 @@ ul{
 }
 
 .toast{
-    background: red;
     padding: 10px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     animation: show-toast 3s forwards;
     border-radius: 15px;
+}
+
+.error{
+    background: red;
+}
+
+.sucess{
+    background: green;
 }
 
 @keyframes show-toast {

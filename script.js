@@ -1,162 +1,230 @@
-const processarDados = (e) => {
-    e.preventDefault()
-    
-    const cpfInput = document.getElementById('cpf')
-    const nomeInput = document.getElementById('nome')
-    const alturaInput = document.getElementById('altura')
-    const idadeInput = document.getElementById('idade')
-    const corInput = document.querySelector('#corPele')
-    
-    const inputs = [cpfInput, nomeInput, idadeInput, alturaInput, corInput]
-    const inputsNames = ['Cpf', 'Nome', 'Idade', 'Altura', 'Cor da pele']
-    const validationFunctions = [validateCpf, validateNome, validateIdade, validateAltura, validateCor]
+const processarDados = (e, {cpfInput, nomeInput, idadeInput, alturaInput, corInput}) => {
+  e.preventDefault();
+  
 
-    let errorMessages = createErrorMessages(inputs, inputsNames, validationFunctions)
-    
-    isValidForm(errorMessages) ? createDataList(inputs, inputsNames) : showErrorMessages(errorMessages)
-    cleanInputs()
-}
 
-addEventListener("submit", processarDados)
+  const data = {
+    cpf: {
+      value: cpfInput.value,
+      label: "Cpf",
+      validationFunction: validateCpf,
+      errorMessage: "Cpf inválido",
+    },
+    nome: {
+      value: nomeInput.value,
+      label: "Nome",
+      validationFunction: validateNome,
+      errorMessage: "Nome inválido",
+    },
+    idade: {
+      value: idadeInput.value,
+      label: "Idade",
+      validationFunction: validateIdade,
+      errorMessage: "Idade inválida",
+    },
+    altura: {
+      value: alturaInput.value,
+      label: "Altura",
+      validationFunction: validateAltura,
+      errorMessage: "Altura inválida",
+    },
+    cor: {
+      value: getColorSkin(corInput.value),
+      label: "Cor de pele",
+      validationFunction: validateCor,
+      errorMessage: "Cor de pele inválida",
+    },
+  };
+
+  let errorMessages = createErrorMessages(data);
+
+  isValidForm(errorMessages)
+    ? createDataList(data)
+    : showToast({ message: errorMessages[0], type: "error" });
+  cleanInputs();
+};
 
 const acceptOnlyNumbers = (e) => {
-    containsOnlyLetters(e.target.value) && showToast("Digite apenas numeros!")
-    e.target.value = e.target.value.replace(/\D/g, '')
-}
+  containsOnlyLetters(e.target.value) &&
+    showToast({ message: "Digite apenas numeros!", type: "error" });
+  e.target.value = e.target.value.replace(/\D/g, "");
+};
 
 const acceptOnlyText = (e) => {
-    containsOnlyNumbers(e.target.value) && showToast("Digite apenas letras!")
-    e.target.value = e.target.value.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿ\s]/g, '')
-}
+  containsOnlyNumbers(e.target.value) &&
+    showToast({ message: "Digite apenas letras!", type: "error" });
+  e.target.value = e.target.value.replace(/[^a-zA-ZÀ-ÖØ-öø-ÿ\s]/g, "");
+};
 
-document.getElementById('cpf').addEventListener('input', acceptOnlyNumbers)
-document.getElementById('nome').addEventListener('input', acceptOnlyText)
-document.getElementById('altura').addEventListener('input', acceptOnlyNumbers)
-document.getElementById('idade') .addEventListener('input', acceptOnlyNumbers)
+const maskCpf = (e) => {
+  const cpfElement = e.target;
+  const lastChar = cpfElement.value.slice(-1);
 
+  if (containsOnlyLetters(lastChar)) {
+    showToast({ message: "Digite apenas numeros!", type: "error" });
+  }
 
-const showToast = (message) => {
-    const toast = document.createElement('p')
-    toast.innerText = message
-    toast.className = 'toast'
+  cpfElement.value = cpfElement.value
+    .replace(/\D/g, "")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1-$2");
 
-    const time = 3000
+  if (cpfElement.value.length > 14) {
+    cpfElement.value = cpfElement.value.slice(0, 14);
+  }
+};
 
-    const hasToast = document.querySelector('.toast') !== null
+const showToast = ({ message, type }) => {
+  const toast = document.createElement("p");
+  toast.innerText = message;
+  toast.className = "toast";
+  const time = 3 * 1000;
+  const hasToast = document.querySelector(".toast");
 
-    if (! hasToast){
-        document.body.appendChild(toast)
-    }
+  switch (type) {
+    case "sucess":
+      toast.classList.add(type);
+      break;
+    case "error":
+      toast.classList.add(type);
+      break;
+    default:
+      return;
+  }
 
-    setTimeout(() => {
-        toast.remove()
-    }, time)
+  if (!hasToast) {
+    document.body.appendChild(toast);
+  }
 
-}
-
+  setTimeout(() => {
+    toast.remove();
+  }, time);
+};
 
 const validateCpf = (cpfValue) => {
-    const isLengthValid = cpfValue.length == 11 
-    const isTypeValid  = containsOnlyNumbers(cpfValue)
-    const isValidCpf = isLengthValid && isTypeValid
-    return isValidCpf
-}
+  const value = cpfValue.replace(/\D/g, "");
+  const isLengthValid = value.length == 11;
+  const isTypeValid = containsOnlyNumbers(value);
+  const isValidCpf = isLengthValid && isTypeValid;
+  return isValidCpf;
+};
 
 const validateNome = (nomeValue) => {
-    const isLengthValid = nomeValue.length > 0
-    const isTypeValid = containsOnlyLetters(nomeValue) 
-    const isValidNome = isLengthValid && isTypeValid
-    return isValidNome
-}
+  const isLengthValid = nomeValue.length > 0;
+  const isTypeValid = containsOnlyLetters(nomeValue);
+  const isValidNome = isLengthValid && isTypeValid;
+  return isValidNome;
+};
 
 const validateAltura = (alturaValue) => {
-    const isLengthValid = alturaValue > 0
-    const isTypeValid  = containsOnlyNumbers(alturaValue)
-    const isValidAltura = isLengthValid && isTypeValid
-    return isValidAltura
-}
+  const isLengthValid = alturaValue > 0;
+  const isTypeValid = containsOnlyNumbers(alturaValue);
+  const isValidAltura = isLengthValid && isTypeValid;
+  return isValidAltura;
+};
 
 const validateIdade = (idadeValue) => {
-    const isLengthValid = idadeValue > 0
-    const isTypeValid  = containsOnlyNumbers(idadeValue)
-    const isValidIdade = isLengthValid && isTypeValid
-    return isValidIdade
-}
+  const isLengthValid = idadeValue > 0;
+  const isTypeValid = containsOnlyNumbers(idadeValue);
+  const isValidIdade = isLengthValid && isTypeValid;
+  return isValidIdade;
+};
 
 const validateCor = (corValue) => {
-    const validColors = ['BR', 'PD', 'NG']
-    const isValidCor = validColors.includes(corValue)
-    return isValidCor
-}
+  const validColors = ["Branco", "Pardo", "Negro"];
+  const isValidCor = validColors.includes(corValue);
+  return isValidCor;
+};
 
+const getColorSkin = (value) => {
+  const data = {
+    BR: "Branco",
+    PD: "Pardo",
+    NG: "Negro",
+  };
 
-const createErrorMessages = (inputs, inputsNames, validationFunctions) => {
-    let errorMessages = []
+  return data[value];
+};
+
+const createErrorMessages = (data) => {
+  let errorMessages = [];
+  let dataKeys = Object.keys(data);
+
+  dataKeys.forEach((element) => {
+    const actualValidationFunction = data[element].validationFunction;
+    const actualValue = data[element].value;
+    const actualErrorMessage = data[element].errorMessage;
     
-    for (let i = 0; i < inputs.length; i++){
-        const actualValidationFunction = validationFunctions[i]
-        const actualInput = inputs[i]
 
-        if (!actualValidationFunction(actualInput.value)){
-            errorMessages.push(`Campo de ${inputsNames[i]} com dados inválidos!`)
-        }
+    if (!actualValidationFunction(actualValue)) {
+      errorMessages.push(actualErrorMessage);
     }
-    
-    return errorMessages
-}
+  });
+  return errorMessages;
+};
 
-const showErrorMessages = (errorMessages) => {
-    alert(errorMessages[0])
-}
+const createDataList = (data) => {
+  const container = document.getElementById("showForm");
+  const list = document.createElement("ul");
 
-const createDataList = (inputs, inputsNames) => {
-    const container = document.getElementById("showForm")
-    const list = document.createElement('ul')
-    
-    if (container){
-        const elementos = []
-        
-        for (let i = 0; i < inputs.length; i++){
-            const actualInput = inputs[i]
-            const actualInputName = inputsNames[i]
-            const SKIN_COLOR = "Cor da pele"
-            if (actualInputName !== SKIN_COLOR){
-                elementos.push(`${actualInputName}: ` + actualInput.value)
-            }
-            else{
-                const selectInput = document.getElementById('corPele')
-                const corSelecionada = selectInput.options[selectInput.selectedIndex].text
-                elementos.push(SKIN_COLOR + ": " + corSelecionada)
-            }
-        } 
-        
-        for (let elemento of elementos){
-            let li = document.createElement('li')
-            li.innerText = elemento
-            list.appendChild(li)
-        }
-        
-        container.appendChild(list)
+  if (container) {
+    const elementos = [];
+    const dataKeys = Object.keys(data);
+
+    dataKeys.forEach((element) => {
+      const actualValue = data[element].value;
+      const actualLabel = data[element].label;
+
+      elementos.push(`${actualLabel}: ` + actualValue);
+    });
+
+    for (let elemento of elementos) {
+      let li = document.createElement("li");
+      li.innerText = elemento;
+      list.appendChild(li);
     }
 
-    document.body.appendChild(container)
-
-}
+    container.appendChild(list);
+    document.body.appendChild(container);
+    showToast("Pessoa cadastrada com sucesso!", "sucess");
+  }
+};
 
 const isValidForm = (errorMessages) => {
-    return errorMessages.length == 0
-}
+  return errorMessages.length == 0;
+};
 
 const cleanInputs = () => {
-    const form = document.getElementById('myForm')
-    form.reset()
-}
-
+  const form = document.getElementById("form");
+  form.reset();
+};
 
 const containsOnlyNumbers = (str) => {
-    return /[^a-zA-ZÀ-ÖØ-öø-ÿ\s]/g.test(str)
-}
+  return /[^a-zA-ZÀ-ÖØ-öø-ÿ\s]/g.test(str);
+};
 
 const containsOnlyLetters = (str) => {
-    return /\D/g.test(str)
+  return /\D/g.test(str);
+};
+
+const cpfInput = document.querySelector("#cpf");
+const nomeInput = document.querySelector("#nome");
+const alturaInput = document.querySelector("#altura");
+const idadeInput = document.querySelector("#idade");
+const corInput = document.querySelector("#corPele");
+
+const inputs = {
+    cpfInput,
+    nomeInput,
+    alturaInput,
+    idadeInput,
+    corInput
 }
+
+cpfInput.addEventListener("input", maskCpf);
+nomeInput.addEventListener("input", acceptOnlyText);
+alturaInput.addEventListener("input", acceptOnlyNumbers);
+idadeInput.addEventListener("input", acceptOnlyNumbers);
+
+addEventListener("submit", (e) => processarDados(e, inputs));
