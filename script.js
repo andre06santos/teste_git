@@ -1,19 +1,64 @@
 const cpfMask = (event) => {
     const cpfInput = event.target;
+    const isNumber  = cpfInput.value === cpfInput.value.replace(/\D/g,"")
+    
+    if(!isNumber){
+        showToast({
+            message: "Digite somente numero",
+            type : "error"
+        })
+    }
+
     cpfInput.value = cpfInput.value.replace(/\D/g, '')
         .replace(/(\d{3})(\d)/, '$1.$2')
         .replace(/(\d{3})(\d)/, '$1.$2')
         .replace(/(\d{2})$/, '-$1');
+    
+    
 };
+const handleNameinput = (event) =>{
+    const nameInput = event.target;
+    const isLetter  = nameInput.value === nameInput.value.replace(/\d/g,"")
+    
+    if(!isLetter){
+        showToast({
+            message: "Digite somente letras",
+            type : "error"
+        })
+    }
 
+    nameInput.value = nameInput.value.replace(/\D/g,"")
+    
+
+}
 const handleHeightInput = (event) => {
     const heightInput = event.target;
+    const isNumber = heightInput.value === heightInput.value.replace(/\D/g,"");
+
+    if(!isNumber){
+        showToast({
+            message: "Digite somente numero",
+            type : "error"
+        })
+    }
+
+
     heightInput.value = heightInput.value.replace(/\D/g, "")
         .replace(/(\d{1})(\d)/, '$1,$2');
 };
 
 const handleAgeInput = (event) => {
     const ageInput = event.target;
+
+    const isNumber  = ageInput.value === ageInput.value.replace(/\D/g,"")
+    
+    if(!isNumber){
+        showToast({
+            message: "Digite somente numero",
+            type : "error"
+        })
+    }
+
     ageInput.value = ageInput.value.replace(/[^0-9]/g, '');
 };
 
@@ -49,24 +94,26 @@ const getColorByValue = (skinColorData) => {
 };
 
 const showToast = ({ message, type }) => {
-    const existingToast = document.querySelector(".toast");
-    if (existingToast) {
-        existingToast.remove();
+    const hasToast = document.querySelector(".toast");
+    if (hasToast) {
+        return
     }
 
     const toast = document.createElement('span');
-    toast.innerText = message;
 
     switch (type) {
         case "success":
-            toast.className = "toast toast-success";
+            toast.classList.add("toast-success");
             break;
         case "error":
-            toast.className = "toast toast-error";
+            toast.classList.add("toast-error");
             break;
         default:
             return;
     }
+    
+    toast.innerText = message;
+    toast.className = "toast";
 
     const timeToast = 3 * 1000;
     document.body.appendChild(toast);
@@ -77,18 +124,17 @@ const showToast = ({ message, type }) => {
 };
 
 const errorMessage = ({ errors, cpf, name, age, height}) => {
-    if (!validateCPF(cpf)) errors.push("CPF INVÁLIDO");
-    if (!validateName(name)) errors.push("NOME INVÁLIDO");
-    if (!validateAge(age)) errors.push("IDADE INVÁLIDA");
-    if (!validateHeight(height)) errors.push("ALTURA INVÁLIDA");
+    if (!validateCPF(cpf)) errors.push("Cpf inválido");
+    if (!validateName(name)) errors.push("Nome inválido");
+    if (!validateAge(age)) errors.push("idade inválida");
+    if (!validateHeight(height)) errors.push("altura inválida");
 };
 
-const showData = ({ cpf, nome, idade, altura, corPele }) => {
+const showData = ({ cpf, nome, idade, altura}) => {
     const cpfValue = cpf.value;
     const nameValue = nome.value;
     const ageValue = Number(idade.value);
     const heightValue = Number(altura.value);
-    const skinColorValue = getColorByValue(corPele.value);
 
     const errors = [];
     
@@ -105,7 +151,7 @@ const showData = ({ cpf, nome, idade, altura, corPele }) => {
         message: errors[0],
         type: "error"
     }) : showToast({
-        message: "TODOS OS DADOS FORAM VÁLIDADOS",
+        message: "Todos os dados foram válidados",
         type: "success"
     });
 };
@@ -120,6 +166,7 @@ const skinColor = form.querySelector("#corPele");
 cpf.addEventListener('input', cpfMask);
 height.addEventListener('input', handleHeightInput);
 age.addEventListener('input', handleAgeInput);
+name.addEventListener('input',handleNameinput)
 
 form.addEventListener("submit", function (event) {
     event.preventDefault();
