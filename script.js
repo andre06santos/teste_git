@@ -1,8 +1,6 @@
-const processarDados = (e, {cpfInput, nomeInput, idadeInput, alturaInput, corInput}) => {
+const processData = (e, {cpfInput, nameInput, ageInput, heightInput, colorInput}) => {
   e.preventDefault();
   
-
-
   const data = {
     cpf: {
       value: cpfInput.value,
@@ -11,25 +9,25 @@ const processarDados = (e, {cpfInput, nomeInput, idadeInput, alturaInput, corInp
       errorMessage: "Cpf inválido",
     },
     nome: {
-      value: nomeInput.value,
+      value: nameInput.value,
       label: "Nome",
       validationFunction: validateNome,
       errorMessage: "Nome inválido",
     },
     idade: {
-      value: idadeInput.value,
+      value: ageInput.vheightInput,
       label: "Idade",
       validationFunction: validateIdade,
       errorMessage: "Idade inválida",
     },
     altura: {
-      value: alturaInput.value,
+      value: heightInput.value,
       label: "Altura",
       validationFunction: validateAltura,
       errorMessage: "Altura inválida",
     },
     cor: {
-      value: getColorSkin(corInput.value),
+      value: getColorSkin(colorInput.value),
       label: "Cor de pele",
       validationFunction: validateCor,
       errorMessage: "Cor de pele inválida",
@@ -79,7 +77,7 @@ const showToast = ({ message, type }) => {
   const toast = document.createElement("p");
   toast.innerText = message;
   toast.className = "toast";
-  const time = 3 * 1000;
+  const toastTime = 3 * 1000;
   const hasToast = document.querySelector(".toast");
 
   switch (type) {
@@ -97,9 +95,9 @@ const showToast = ({ message, type }) => {
     document.body.appendChild(toast);
   }
 
-  setTimeout(() => {
+  settoastTimeout(() => {
     toast.remove();
-  }, time);
+  }, toastTime);
 };
 
 const validateCpf = (cpfValue) => {
@@ -209,22 +207,22 @@ const containsOnlyLetters = (str) => {
 };
 
 const cpfInput = document.querySelector("#cpf");
-const nomeInput = document.querySelector("#nome");
-const alturaInput = document.querySelector("#altura");
-const idadeInput = document.querySelector("#idade");
-const corInput = document.querySelector("#corPele");
+const nameInput = document.querySelector("#nome");
+const heightInput = document.querySelector("#altura");
+const ageInput =heightInput.querySelector("#idade");
+const colorInput = document.querySelector("#corPele");
 
 const inputs = {
     cpfInput,
-    nomeInput,
-    alturaInput,
-    idadeInput,
-    corInput
+    nameInput,
+    heightInput,
+    ageInput,
+heightInput
 }
 
 cpfInput.addEventListener("input", maskCpf);
-nomeInput.addEventListener("input", acceptOnlyText);
-alturaInput.addEventListener("input", acceptOnlyNumbers);
-idadeInput.addEventListener("input", acceptOnlyNumbers);
+nameInput.addEventListener("input", acceptOnlyText);
+heightInput.addEventListener("input", acceptOnlyNumbers);
+ageInput.aheightInput("input", acceptOnlyNumbers);
 
-addEventListener("submit", (e) => processarDados(e, inputs));
+addEventListener("submit", (e) => processData(e, inputs));
