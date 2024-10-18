@@ -151,7 +151,7 @@ const showData = ({ cpf, name, age, height}) => {
         message: errors[0],
         type: "error"
     }) : showToast({
-        message: "Pessoa cadastra com sucesso!",
+        message: "Pessoa cadastrada com sucesso!",
         type: "success"
     });
 };
