@@ -4,7 +4,7 @@ const cpfMask = (event) => {
     
     if(!isNumber){
         showToast({
-            message: "Digite somente numero",
+            message: "Digite somente números",
             type : "error"
         })
     }
@@ -37,7 +37,7 @@ const handleHeightInput = (event) => {
 
     if(!isNumber){
         showToast({
-            message: "Digite somente numero",
+            message: "Digite somente números",
             type : "error"
         })
     }
@@ -54,7 +54,7 @@ const handleAgeInput = (event) => {
     
     if(!isNumber){
         showToast({
-            message: "Digite somente numero",
+            message: "Digite somente números",
             type : "error"
         })
     }
@@ -130,11 +130,11 @@ const errorMessage = ({ errors, cpf, name, age, height}) => {
     if (!validateHeight(height)) errors.push("altura inválida");
 };
 
-const showData = ({ cpf, nome, idade, altura}) => {
+const showData = ({ cpf, name, age, height}) => {
     const cpfValue = cpf.value;
-    const nameValue = nome.value;
-    const ageValue = Number(idade.value);
-    const heightValue = Number(altura.value);
+    const nameValue = name.value;
+    const ageValue = Number(age.value);
+    const heightValue = Number(height.value);
 
     const errors = [];
     
@@ -151,7 +151,7 @@ const showData = ({ cpf, nome, idade, altura}) => {
         message: errors[0],
         type: "error"
     }) : showToast({
-        message: "Todos os dados foram válidados",
+        message: "Pessoa cadastra com sucesso!",
         type: "success"
     });
 };
